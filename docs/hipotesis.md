@@ -1,25 +1,23 @@
-# Hipótesis previas a la medición
+# Hipótesis — Equipo 2
 
-**Estado:** predicciones redactadas el 9 de noviembre de 2026. Aún no están en un commit; siguiendo las reglas del curso, no iniciaremos corridas experimentales hasta guardar la hipótesis en un commit fechado. En esta sesión solo hicimos una prueba pequeña para verificar que el ejecutor corre y genera el CSV; no la usaremos como resultado experimental.
+Las predicciones se registran antes de medir. Se compararán las estrategias A y B con las mismas tareas para cada n; C se incluirá cuando su implementación esté integrada y supere las pruebas de corrección. La computadora disponible tiene 4 núcleos físicos y 8 lógicos. No suponemos que `pbkdf2_hmac` mantenga el GIL: puede liberar el GIL y permitir que los hilos ejecuten trabajo de CPU concurrentemente.
 
-Estas predicciones corresponden a la carga del ejecutor descrita abajo, no a una equivalencia verificada con `src/linea_base.py`: ese archivo no estaba presente en el checkout disponible al preparar el documento. Antes de presentar las cifras como comparación con la línea base del proyecto, verificaremos que su función hash y sus tareas coincidan con el protocolo o ajustaremos el ejecutor antes del commit de hipótesis.
+## H1 — Tiempo de pared
 
-## H1: solapar esperas de E/S
+> **Si** sustituyo la estrategia secuencial A por la estrategia B con hilos para n = 80, **entonces** la razón entre el tiempo medio de A y el de B será al menos 1,5 (B tardará como máximo dos tercios de A), **porque** las esperas simuladas de E/S pueden solaparse y, si `pbkdf2_hmac` libera el GIL, parte del trabajo de CPU también podría ejecutarse en paralelo, **manteniendo** las mismas 80 tareas preparadas con semilla 2, el equipo, Python 3.14.7, la alimentación, los programas abiertos y el protocolo de diez repeticiones.
 
-**Hipótesis:** Si pasamos de E0 secuencial con un trabajador a E1 hilos o E2 asyncio con cuatro trabajadores, entonces el tiempo de pared (`t_pared_s`, s) para 32 tareas 100 % E/S, con latencia de 0.1 s, será al menos cuatro veces menor: esperamos `t_pared_s ≤ 0.8 s`, frente a `3.2 s` de espera secuencial ideal, porque mientras unas tareas esperan, los hilos o el event loop pueden avanzar otras. Este contraste cambia conjuntamente la estrategia y el número de trabajadores; mantenemos la misma lista de 32 tareas, la semilla 42, la latencia de 0.1 s y el equipo.
+**La refutaríamos** si la razón entre los tiempos medios A/B para n = 80 es menor que 1,5; también quedaría refutada si B tarda más que A. El tiempo se toma de las diez corridas de tiempo, no de la corrida separada de memoria.
 
-**Predicción numérica:** E0: `32 × 0.1 s = 3.2 s` de espera simulada; E1 y E2: `t_pared_s ≤ 0.8 s` con cuatro trabajadores. Son valores ideales de la carga de `sleep`, no resultados medidos; el tiempo observado puede incluir sobrecarga de planificación.
+## H2 — Uso de CPU
 
-**La refutaría:** que, en las repeticiones, la mediana de `t_pared_s` de E1 o E2 supere `0.8 s` en esa condición, después de confirmar que se ejecutaron 32 tareas con la misma latencia y que la medición incluye las mismas fases.
+> **Si** sustituyo A por B con hilos para n = 80, **entonces** el uso medio de CPU del proceso de B aumentará al menos 10 puntos porcentuales respecto de A, **porque** mientras unas tareas esperan E/S otras pueden ejecutar el hash; en este equipo de 4 núcleos físicos y 8 lógicos, la liberación del GIL por `pbkdf2_hmac` también podría permitir trabajo de CPU concurrente, **manteniendo** la misma carga y semilla 2, equipo, versión de Python, alimentación, programas abiertos y protocolo de diez repeticiones.
 
-## H2: procesos frente a hilos en una carga de CPU
+**La refutaríamos** si el promedio de `uso_cpu_pct` de B menos el de A es inferior a 10 puntos porcentuales. `uso_cpu_pct` es tiempo de CPU del proceso dividido por tiempo de pared; puede superar 100 % al utilizar varios núcleos y no representa potencia ni energía.
 
-**Hipótesis:** Si cambiamos E1 hilos por E3 procesos, entonces el tiempo de pared (`t_pared_s`, s) para 32 tareas 100 % CPU será al menos 20 % menor en E3: esperamos `t_pared_s(E3) ≤ 0.80 × t_pared_s(E1)`, porque cada hash procesa una entrada de 1024 bytes (menor que el umbral de 2048 bytes a partir del cual `hashlib` puede liberar el GIL en una llamada), y procesos distintos pueden ejecutar trabajo en núcleos diferentes; mantenemos la misma lista de tareas, semilla 42, 20 000 iteraciones de hash por tarea, equipo y 8 trabajadores (las 8 CPU lógicas que reporta este entorno).
+## Condiciones fijadas antes de medir
 
-**Predicción numérica:** la razón `t_pared_s(E3) / t_pared_s(E1)` será `≤ 0.80` (20 % o más de reducción). El entorno consultado reporta 8 CPU lógicas; confirmaremos ese dato en el equipo donde corramos el experimento. La predicción también depende de que la carga de CPU sea bastante grande para que la creación y coordinación de procesos no elimine la ganancia.
-
-**La refutaría:** que la mediana de esa razón sea mayor que `0.80`, o que E3 tarde igual o más que E1. También revisaremos la hipótesis si el código real de la línea base procesa bloques grandes en una sola llamada de hash: algunas funciones de hash liberan el GIL con datos grandes, por lo que procesos no tienen garantizada una ventaja frente a hilos.
-
-## Alcance de las afirmaciones físicas
-
-`t_pared_s` mide el tiempo transcurrido y `t_cpu_s` el tiempo de CPU contabilizado; no son la misma magnitud. Mientras `time.sleep()` espera, modelamos una CPU que puede quedar ociosa, pero no medimos potencia eléctrica ni temperatura. No presentaremos potencia o temperatura como resultados medidos de este protocolo.
+- **Fecha de registro:** 2026-11-18.
+- **VI:** estrategia (A/B/C) y tamaño n (20, 40, 80 tareas).
+- **VD para contrastar estas hipótesis:** tiempo de pared (s) y uso de CPU del proceso (%).
+- **Controles:** equipo, Python, alimentación, programas abiertos, tareas generadas con semilla 2, calentamiento, orden aleatorio con semilla 42 y diez repeticiones por combinación.
+- **Energía:** no se medirá con RAPL ni vatímetro; no se afirmará ahorro energético.

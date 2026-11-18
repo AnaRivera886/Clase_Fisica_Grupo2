@@ -1,9 +1,14 @@
-# Registro de uso de IA
+# Bitácora de uso de inteligencia artificial
 
-## 2026-11-09
+La IA es una herramienta de apoyo permitida. Cada uso relevante se registra. **Usted es responsable de
+verificar todo lo que la IA produce y de poder explicarlo sin ella.**
 
-- **Herramienta:** asistente de IA integrado al entorno de desarrollo.
-- **Qué pedimos:** pedimos apoyo para redactar el README, la tabla de variables, las hipótesis, la bitácora y el ejecutor reproducible de estrategias secuencial, hilos, asyncio y procesos; también para documentar el entorno.
-- **Qué verificamos:** comprobamos que el checkout inicial no contenía archivos del proyecto ni commits; Git indicó que la rama `main` no tenía commits y que el remoto no tenía una rama disponible. El lanzador `py` permitió ejecutar CPython 3.14.7. Una prueba pequeña del ejecutor generó 24 filas con las cuatro estrategias, tres proporciones E/S y dos repeticiones; confirmamos que el encabezado coincide con las 11 columnas solicitadas. El sistema reportó AMD Ryzen 5 PRO 2400G con Radeon Vega Graphics y 8 CPU lógicas.
-- **Qué no verificamos:** no ejecutamos `src.linea_base`, no realizamos ni conservamos la serie de 30 repeticiones por condición y no comparamos las hipótesis con resultados. La prueba pequeña solo comprobó que el código corre; no la tratamos como medición del estudio. La hipótesis aún debe quedar en un commit anterior a cualquier corrida experimental, conforme al curso.
-- **Revisión del equipo:** antes de entregar, compararemos el ejecutor con la línea base real, confirmaremos el número de trabajadores en el equipo de corridas, completaremos las mediciones y gestionaremos el cambio mediante issue, rama y PR revisado por otro integrante.
+| # | Fecha | Integrante | Herramienta | Propósito (investigar, depurar, alternativas...) | Consulta (resumen) | ¿Qué se usó de la respuesta? | ¿Cómo se verificó? | Errores o suposiciones detectadas en la respuesta |
+|---|---|---|---|---|---|---|---|---|
+| 1 | 2026-11-18 | Jeff | Copilot SDK en VS Code | Completar el protocolo y preparar mediciones reproducibles | Pedí documentar variables, hipótesis, protocolo y entorno para comparar A/B/C, sin inventar salidas ni resultados | Usé el borrador de variables, dos hipótesis falsables, parámetros del protocolo y los datos del sistema que pude obtener; dejé como pendientes la salida del script de Drive, la línea base y el estado de corriente | Contrasté los valores de la computadora con Windows; ejecuté `herramientas.sensores` y `labmedicion.describir_entorno`; revisé el ejecutor y la plantilla antes de documentar | `python` no está en PATH; `py -3` inicia Python 3.14.7 pero muestra el aviso `Could not find platform independent libraries <prefix>`. El script `diagnostico_entorno.py` no está en la copia disponible y GitHub devuelve 404, así que no afirmé haberlo ejecutado ni creado issues/PR. |
+
+## Reflexión individual (Clase 5, una por integrante)
+- **Nombre:** Jeff
+- ¿En qué le ayudó la IA y en qué lo confundió?
+- Un error o afirmación sin evidencia que detectó en la IA y cómo lo comprobó:
+- ¿Qué parte del proyecto puede explicar completamente sin ayuda?

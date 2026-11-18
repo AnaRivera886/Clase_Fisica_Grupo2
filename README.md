@@ -1,53 +1,59 @@
-# Experimento de concurrencia para ServiCampo Ltda.
+# Equipo 2 — Concurrencia y procesamiento de tareas
 
-## Problema empresarial
+> Proyecto: *Laboratorio colaborativo de rendimiento y eficiencia computacional desde la física aplicada*
+> Física Aplicada al Desarrollo de Software · SENA · ADSO · 7.º trimestre
 
-En ServiCampo Ltda. consultamos servicios externos de clima y precios agrícolas. La cola actual atiende las solicitudes una por una: aunque el procesador pasa parte del tiempo esperando respuestas, los usuarios pueden esperar varios segundos para recibir todos los datos. Queremos comparar estrategias de ejecución y medir su efecto en el tiempo de respuesta y en el uso de CPU, antes de recomendar un cambio.
+## 1. Problema empresarial
+**Empresa (caso simulado):** ServiCampo Ltda., plataforma que consulta servicios externos de clima y precios agrícolas
 
-## Situación inicial medida
+La cola de solicitudes se atiende una por una. Los usuarios esperan varios segundos aunque el servidor reporta la CPU casi ociosa.
 
-La línea base prevista es la ejecución secuencial de `src/linea_base.py`, que se ejecuta con:
+## 2. Situación inicial medible
+src/linea_base.py ejecuta secuencialmente tareas de E/S (espera) y de CPU (hash).
 
-```powershell
-python -m src.linea_base
+| Medición preliminar (Clase 3) | Valor | Unidad |
+|---|---|---|
+| n utilizado | Pendiente de ejecutar la línea base | tareas |
+| Salida de `linea_base` | Pendiente; pegar literalmente después de ejecutar | texto |
+| Equipo y fecha | Lenovo 10VUS1SK00 · Ryzen 5 PRO 2400G · 2026-11-18 | — |
+
+## 3. Pregunta de investigación
+_¿Cómo cambia el tiempo de pared (s), el uso de CPU (%) y el pico de memoria (MiB) al cambiar la estrategia A/B/C y n = 20, 40, 80 tareas, manteniendo el equipo, Python, los datos de semilla 2, la alimentación y los programas abiertos?_
+
+## 4. Hipótesis
+Ver [docs/hipotesis.md](docs/hipotesis.md).
+
+## 5. Estrategias
+| Id | Estrategia | Idea principal | Efecto físico esperado | Responsable |
+|---|---|---|---|---|
+| A | Línea base secuencial | Atiende las tareas una por una | Referencia sin solapamiento de esperas | Julian |
+| B | Con hilos | Solapa tareas mientras otras esperan E/S; el trabajo CPU también se medirá sin asumir que el GIL lo impide | Puede reducir tiempo de pared y elevar el uso de CPU | Ana |
+| C | Por confirmar en el PR de Ana | Pendiente de documentar al revisar su implementación | Pendiente de justificar | Ana |
+
+## 6. Cómo reproducir
+```bash
+python -m venv .venv && source .venv/bin/activate      # Windows: .venv\Scripts\activate
+pip install -r requirements.txt                          # opcional: psutil, matplotlib
+python -m src.linea_base                                 # situación inicial
+python -m unittest discover -s pruebas                   # corrección
+python -m experimentos.ejecutar_experimento              # experimento formal -> resultados/resultados.csv
+python ruta/a/analizar_resultados.py resultados/resultados.csv
 ```
+En este Windows, `python` no está en PATH; usar `py -3 -m ...` como equivalente.
 
-**Salida real de la línea base:** pendiente de registrar. No incluimos cifras hasta ejecutar el comando en el equipo del experimento y conservar su salida completa aquí:
+## 7. Integrantes y roles
+| Rol | Integrante | Responsabilidad principal |
+|---|---|---|
+| R1 — Coordinación y protocolo experimental | Jeff | Mantiene el protocolo, controla variables y coordina issues y planeación. |
+| R2 — Desarrollo de estrategia base | Julian | Comprende y documenta la línea base y verifica la corrección. |
+| R3 — Estrategias alternativas y optimización | Ana | Implementa las estrategias alternativas y justifica los cambios esperados. |
+| R4 — Automatización de mediciones y análisis | Jeff (entorno y ejecución); Ana (análisis y gráficos) | Automatiza/ejecuta mediciones, documenta el entorno y analiza resultados. |
 
-```text
-[Pegar aquí, sin modificar, la salida obtenida de python -m src.linea_base]
-```
+Los roles son flexibles: **todos** participan en la comprensión física y en el código.
 
-En el checkout inicial usado para preparar este protocolo no estaba `src/linea_base.py`, así que no pudimos ejecutar la medición de referencia. Después verificamos que el lanzador `py` sí permite ejecutar Python 3.14.7 y validar el ejecutor con una prueba pequeña, pero esa prueba no reemplaza ni representa la salida de la línea base. Por eso esta sección no afirma tiempos que no hayamos observado. Antes de medir, restauraremos la línea base del equipo y registraremos su salida.
+## 8. Documentación
+- [Variables](docs/variables.md) · [Protocolo](docs/protocolo.md) · [Entorno](docs/entorno.md)
+- [Decisiones técnicas](docs/decisiones.md) · [Uso de IA](docs/uso_ia.md) · [Informe](docs/informe.md)
 
-## Qué medimos
-
-Comparamos E0 (secuencial), E1 (hilos), E2 (asyncio) y E3 (procesos), con distintas proporciones de tareas de E/S y CPU. La carga reproducible del ejecutor se describe en [docs/bitacora.md](docs/bitacora.md) y sus variables en [docs/variables.md](docs/variables.md). La hipótesis debe quedar en un commit fechado antes de iniciar las mediciones, siguiendo las reglas del curso.
-
-`time.sleep()` **simula** una espera de red: no realiza una consulta HTTP ni representa toda la variabilidad de una red real. El resultado solo permite comparar estrategias bajo esta carga controlada.
-
-## Ejecución del protocolo
-
-Desde la raíz del proyecto:
-
-```powershell
-python -m src.documentar_entorno
-python -m src.ejecutar_experimentos
-```
-
-En Windows, si el comando `python` no está disponible, podemos usar `py -m` con los mismos módulos.
-
-El ejecutor prepara los mismos datos deterministas para cada estrategia, hace un calentamiento no medido, aleatoriza el orden de las estrategias dentro de cada repetición y escribe `results/resultados.csv`. Por defecto usa 30 repeticiones, 32 tareas, semilla 42, latencia simulada de 0.1 s, proporciones E/S de 0 %, 50 % y 100 %, y tantas tareas de CPU como para ejecutar 20 000 hashes por tarea. Los valores se pueden cambiar con `--help`; hay que registrar en la bitácora toda configuración no predeterminada.
-
-Ejemplo para ejecutar solo la condición 100 % E/S con cuatro trabajadores:
-
-```powershell
-python -m src.ejecutar_experimentos --pct-es 100 --trabajadores 4
-```
-
-El CSV incluye estas columnas, en este orden: `estrategia,pct_es,n_trabajadores,n_tareas,semilla,latencia_sim_s,repeticion,t_pared_s,t_cpu_s,razon_cpu_pared_pct,tareas_por_s`. En E3, `t_cpu_s` suma el CPU del proceso principal y de los hijos; si el sistema no expone tiempos de CPU de hijos, usa como alternativa el CPU reportado por las tareas ejecutadas en ellos. El cociente CPU/pared puede superar 100 % cuando varios procesos trabajan en paralelo.
-
-## Entorno y registro
-
-Guardamos la información del entorno en `results/entorno.txt` con el comando anterior y documentamos las decisiones y controles en [docs/bitacora.md](docs/bitacora.md). Registramos el apoyo de IA en [docs/uso_ia.md](docs/uso_ia.md).
-# Clase_Fisica_Grupo2
+## 9. Resultados y conclusiones (Clase 5)
+_Resumen de máximo 5 líneas con cifras, unidades e intervalo de confianza._
