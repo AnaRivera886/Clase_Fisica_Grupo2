@@ -65,3 +65,4 @@ Los roles son flexibles: **todos** participan en la comprensión física y en el
 
 ## 9. Resultados y conclusiones (Clase 5)
 _Resumen de máximo 5 líneas con cifras, unidades e intervalo de confianza._
+# Clase_Fisica_Grupo2
