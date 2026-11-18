@@ -35,8 +35,16 @@ Ver [docs/hipotesis.md](docs/hipotesis.md).
 | Id | Estrategia | Idea principal | Efecto físico esperado | Responsable |
 |---|---|---|---|---|
 | A | Línea base secuencial | Atiende las tareas una por una | Referencia sin solapamiento de esperas | Julian |
-| B | Con hilos | Solapa tareas mientras otras esperan E/S; el trabajo CPU también se medirá sin asumir que el GIL lo impide | Puede reducir tiempo de pared y elevar el uso de CPU | Ana |
-| C | Por confirmar en el PR de Ana | Pendiente de documentar al revisar su implementación | Pendiente de justificar | Ana |
+| B | Con hilos (`src/estrategia_b.py`, `ThreadPoolExecutor`, 8 hilos) · rama *sin esperas ociosas → concurrencia* | Varias tareas en curso a la vez: mientras un hilo duerme esperando la red simulada, otro avanza. `time.sleep` libera el GIL, así que las esperas se solapan | Menor tiempo de pared sin más trabajo total: el tiempo de E/S pasa de ≈ Σ latencias a ≈ Σ latencias / 8. Si `pbkdf2_hmac` libera el GIL, el hash también corre en varios núcleos y `uso_cpu_pct` puede superar 100 % | Ana |
+| C | Con procesos (`src/estrategia_c.py`, `ProcessPoolExecutor`, 8 procesos) · rama *repartir trabajo → multinúcleo* | Cada proceso tiene su propio intérprete y su propio GIL: el trabajo de CPU se reparte entre núcleos (paralelismo) y las esperas también se solapan | Menor tiempo de pared solo si el trabajo de CPU supera el costo fijo de crear procesos (*spawn* en Windows) y serializar datos; con n pequeño puede ser más lento que A. Más núcleos activos implican más potencia instantánea, así que más rápido no significa menos energía (E = P̄·t) | Ana |
+
+**Concurrencia vs. paralelismo.** B es concurrencia: aprovecha el tiempo en que la CPU estaba ociosa esperando, incluso con un solo núcleo. C es paralelismo: ejecuta trabajo de CPU en el mismo instante en núcleos distintos. Por eso están en ramas distintas del mapa de optimización y no son dos versiones de la misma idea.
+
+**El GIL.** En CPython un proceso ejecuta bytecode Python en un solo hilo a la vez. `time.sleep` y algunas funciones en C (como `hashlib.pbkdf2_hmac`) lo liberan mientras trabajan. Una prueba informal (una corrida, en otro PC, n = 40 solo CPU) mostró B con una razón CPU/pared de ≈ 365 %, señal de que el hash sí corrió en varios hilos a la vez. **No es un resultado del experimento:** lo decide la medición formal en el equipo de Jeff.
+
+**Límites de medición de C.** `labmedicion` mide `cpu_proceso_s` con `time.process_time()`, que solo cuenta el proceso principal, y `tracemalloc` no ve la memoria de los hijos. En C, `uso_cpu_pct` y `pico_mem_mib` quedan **subestimados** y así deben reportarse.
+
+**Corrección.** B y C usan `preparar(n)` de la línea base (la preparación no se mide) y `ejecutar(tareas)` devuelve el número de tareas completadas; además verifican que cada tarea devolvió su propio id. `experimentos/ejecutar_experimento.py` compara cada estrategia con la línea base antes de medir.
 
 ## 6. Cómo reproducir
 ```bash
