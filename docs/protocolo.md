@@ -9,7 +9,7 @@ Comparar cómo cambian el tiempo de pared, el uso de CPU y el pico de memoria al
 ## 2. Preparación del entorno (antes de cada sesión)
 
 1. Usar el mismo computador: AMD Ryzen 5 PRO 2400G, 4 núcleos físicos y 8 lógicos, Windows 10 y CPython 3.14.7.
-2. Confirmar y anotar conexión a corriente y perfil de energía. La conexión aún está pendiente de verificación.
+2. Confirmar y anotar conexión a corriente y perfil de energía. Jeff confirmó conexión a corriente el 2026-11-18; volver a verificarla al empezar la corrida formal.
 3. Cerrar aplicaciones no esenciales y sincronizadores; no usar el equipo durante la medición. Anotar las aplicaciones que deban permanecer abiertas.
 4. Ejecutar el diagnóstico disponible y guardar su salida en `docs/entorno.md`. El script de Drive `diagnostico_entorno.py` no está en la copia de trabajo actual; no reemplazar su salida por una salida inventada.
 5. Confirmar que las estrategias A, B y C estén integradas, que las pruebas de corrección pasen y que la hipótesis ya tenga un commit anterior a la medición.

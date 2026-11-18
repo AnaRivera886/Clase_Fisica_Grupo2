@@ -13,7 +13,7 @@
 | Dependiente opcional | Energía | E | J | no disponible en este equipo | RAPL o vatímetro; ninguno disponible confirmado | No se afirma ahorro de energía a partir del porcentaje de CPU. |
 | Controlada | Equipo | — | — | Lenovo 10VUS1SK00; AMD Ryzen 5 PRO 2400G, 4 núcleos físicos / 8 lógicos; Windows 10 | Diagnóstico local de Windows | Se mantendrá el mismo computador durante la comparación. |
 | Controlada | Python | — | — | CPython 3.14.7 | `python --version` / `py -3 --version` | La versión puede afectar intérprete, bibliotecas y rendimiento. |
-| Controlada | Alimentación y perfil | — | — | Por confirmar antes de la corrida formal; perfil equilibrado | Verificación física y configuración de Windows | Evita cambios de frecuencia y ahorro energético entre estrategias. |
+| Controlada | Alimentación y perfil | — | — | Corriente confirmada por Jeff el 2026-11-18; reconfirmar en la corrida formal. Perfil equilibrado por verificar | Verificación física y configuración de Windows | Evita cambios de frecuencia y ahorro energético entre estrategias. |
 | Controlada | Programas abiertos | — | — | Por fijar antes de la corrida formal; cerrar aplicaciones no esenciales | Registro en `docs/entorno.md` | La actividad en segundo plano puede competir por CPU y memoria. |
 | Controlada | Datos de entrada | — | — | Semilla 2, misma lista de tareas para A/B/C de cada n | `linea_base.preparar(n, semilla=2)` | Aísla el efecto de la estrategia y conserva la misma mezcla de tareas y latencias. |
 

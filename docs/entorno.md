@@ -29,11 +29,11 @@ La comprobación de sensores de `herramientas.sensores` informó que temperatura
 
 - **Equipo:** Lenovo 10VUS1SK00; AMD Ryzen 5 PRO 2400G, 4 núcleos físicos y 8 lógicos.
 - **Sistema/Python:** Windows 10 · CPython 3.14.7.
-- **¿Conectado a corriente?:** pendiente de verificación física. Windows no devolvió una lectura de batería en la consulta disponible; no infiero el estado de alimentación.
+- **¿Conectado a corriente?:** Sí, confirmado por Jeff el 2026-11-18. Windows no devolvió una lectura de batería en la consulta disponible, así que la confirmación no proviene de un sensor; volver a verificar al iniciar el experimento formal.
 - **Aplicaciones abiertas en la sesión de documentación (snapshot 2026-11-18 10:48:35):** Chrome, VS Code, Word y EVE Online; también se observaron procesos de MongoDB y PostgreSQL. Este snapshot no es el estado de una corrida formal. Antes del experimento se cerrarán las aplicaciones no esenciales y se registrará cualquier aplicación que deba permanecer abierta.
 - **Temperatura:** no disponible. Plan B: reportarla como **no medida**, no estimarla; mantener iguales las condiciones de alimentación y calentamiento, y anotar cualquier señal de throttling o incidente.
 - **RAPL:** no disponible en Windows; **energía no medida**. El porcentaje de CPU no se usará como sustituto de energía.
-- **Experimento formal:** pendiente; completar la alimentación y las aplicaciones abiertas en la fecha de ejecución.
+- **Experimento formal:** pendiente; volver a confirmar la alimentación y anotar qué aplicaciones quedan abiertas en la fecha de ejecución.
 
 ## Salida solicitada pendiente
 
