@@ -13,9 +13,17 @@ src/linea_base.py ejecuta secuencialmente tareas de E/S (espera) y de CPU (hash)
 
 | Medición preliminar (Clase 3) | Valor | Unidad |
 |---|---|---|
-| n utilizado | Pendiente de ejecutar la línea base | tareas |
-| Salida de `linea_base` | Pendiente; pegar literalmente después de ejecutar | texto |
+| n utilizado | 40 por condición | tareas |
+| Tiempo de pared (1 corrida por condición) | Solo E/S: 1.71; solo CPU: 0.37 | s |
 | Equipo y fecha | Lenovo 10VUS1SK00 · Ryzen 5 PRO 2400G · 2026-11-18 | — |
+
+Salida literal de `py -3 -m src.linea_base` (el programa hace una corrida de n = 40 para cada condición):
+
+```text
+Could not find platform independent libraries <prefix>
+solo E/S  pared = 1.71 s   CPU = 0.00 s   CPU/pared =   0.0 %
+solo CPU  pared = 0.37 s   CPU = 0.36 s   CPU/pared =  97.1 %
+```
 
 ## 3. Pregunta de investigación
 _¿Cómo cambia el tiempo de pared (s), el uso de CPU (%) y el pico de memoria (MiB) al cambiar la estrategia A/B/C y n = 20, 40, 80 tareas, manteniendo el equipo, Python, los datos de semilla 2, la alimentación y los programas abiertos?_
