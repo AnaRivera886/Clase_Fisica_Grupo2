@@ -54,6 +54,7 @@ python -m src.linea_base                                 # situación inicial
 python -m unittest discover -s pruebas                   # corrección
 python -m experimentos.ejecutar_experimento              # experimento formal -> resultados/resultados.csv
 python ruta/a/analizar_resultados.py resultados/resultados.csv
+python -m experimentos.analisis_equipo2 resultados/resultados.csv   # estadística y gráficos del equipo
 ```
 En este Windows, `python` no está en PATH; usar `py -3 -m ...` como equivalente.
 
