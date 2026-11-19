@@ -27,3 +27,9 @@ Las predicciones se registran antes de medir. Se compararán las estrategias A y
 - **VD para contrastar estas hipótesis:** tiempo de pared (s) y uso de CPU del proceso (%).
 - **Controles:** carga mixta con proporción E/S predeterminada de 0,5, ocho trabajadores en B y C, equipo, Python, alimentación, programas abiertos, tareas generadas con semilla 2, calentamiento, orden aleatorio con semilla 42 y diez repeticiones por combinación.
 - **Energía:** no se medirá con RAPL ni vatímetro; no se afirmará ahorro energético.
+
+## Enmienda de controles antes del bloque formal
+
+- **Fecha:** 2026-11-18. Jeff confirma Acer Aspire A315-42 como equipo de medición. La lectura automática registró Windows 11 y CPython 3.13.0; `py -3.14` no está disponible.
+- **Alcance:** se actualiza el control de equipo y Python para el bloque formal siguiente. Se mantienen H1–H3, sus umbrales, las VI/VD, la carga, los ocho trabajadores y las diez repeticiones.
+- **Registro:** el intento anterior se conserva como piloto y no se usa para evaluar las hipótesis. La enmienda precede a la nueva corrida formal.

@@ -8,8 +8,8 @@ Comparar cómo cambian el tiempo de pared, el uso de CPU y el pico de memoria al
 
 ## 2. Preparación del entorno (antes de cada sesión)
 
-1. Usar el mismo computador: AMD Ryzen 5 PRO 2400G, 4 núcleos físicos y 8 lógicos, Windows 10 y CPython 3.14.7.
-2. Confirmar y anotar conexión a corriente y perfil de energía. Jeff confirmó conexión a corriente el 2026-11-18; volver a verificarla al empezar la corrida formal.
+1. Usar el equipo confirmado para la medición: Acer Aspire A315-42, Windows 11 y CPython 3.13.0 (`py -3`). Esta configuración reemplaza el control inicial Lenovo/Windows 10/CPython 3.14.7, según la enmienda previa al bloque formal.
+2. Confirmar y anotar conexión a corriente y perfil de energía al empezar cada corrida. Jeff confirmó conexión a corriente antes del intento piloto; volver a verificarla antes del bloque formal.
 3. Cerrar aplicaciones no esenciales y sincronizadores; no usar el equipo durante la medición. Anotar las aplicaciones que deban permanecer abiertas.
 4. Ejecutar el diagnóstico disponible y guardar su salida en `docs/entorno.md`. El script de Drive `diagnostico_entorno.py` no está en la copia de trabajo actual; no reemplazar su salida por una salida inventada.
 5. Confirmar que las estrategias A, B y C estén integradas, que las pruebas de corrección pasen y que la hipótesis ya tenga un commit anterior a la medición.
@@ -47,4 +47,4 @@ El comando `py -3` se usa en este equipo porque `python` no está disponible en 
 
 | Fecha/hora | Incidente (p. ej. actualización del SO, batería o aplicación inesperada) | Corridas afectadas | Decisión |
 |---|---|---|---|
-| 2026-11-18 20:58–21:00 | Se ejecutó `py -3` en Acer Aspire A315-42, Windows 11 y CPython 3.13.0, distinto del Lenovo/Windows 10/CPython 3.14.7 documentado; `py -3.14` no está instalado. Jeff confirmó corriente y cierre de las aplicaciones indicadas; no reportó otros incidentes. | Intento inicial: 90 mediciones de tiempo y 9 de memoria; CV de B > 10 % en n = 20, 40 y 80. | Conservar el CSV y el JSON como ensayo no formal; no evaluar H1–H3 ni publicar como resultados formales. Repetir en el equipo documentado y aplicar el criterio de CV. |
+| 2026-11-18 20:58–21:00 | El primer bloque se ejecutó en Acer Aspire A315-42, Windows 11 y CPython 3.13.0 antes de que Jeff confirmara este equipo como objetivo y se enmendaran los controles. No se reportaron incidentes operativos adicionales; el CV de B superó 10 % en los tres tamaños. | Intento piloto: 90 mediciones de tiempo y 9 de memoria. | Conservarlo como piloto local y no usarlo para evaluar H1–H3. En el bloque formal aplicar la enmienda y el criterio de repetición por CV. |

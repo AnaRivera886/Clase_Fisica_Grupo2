@@ -27,19 +27,19 @@ La comprobación de sensores de `herramientas.sensores` informó que temperatura
 
 ## Condiciones para el experimento
 
-- **Equipo:** Lenovo 10VUS1SK00; AMD Ryzen 5 PRO 2400G, 4 núcleos físicos y 8 lógicos.
-- **Sistema/Python:** Windows 10 · CPython 3.14.7.
-- **¿Conectado a corriente?:** Sí, confirmado por Jeff el 2026-11-18. Windows no devolvió una lectura de batería en la consulta disponible, así que la confirmación no proviene de un sensor; volver a verificar al iniciar el experimento formal.
+- **Equipo de medición confirmado:** Acer Aspire A315-42.
+- **Sistema/Python:** Windows 11 · CPython 3.13.0 (`py -3`); `py -3.14` no está instalado. Esta configuración reemplaza el registro inicial del Lenovo/Windows 10/CPython 3.14.7.
+- **¿Conectado a corriente?:** Jeff lo confirmó antes del intento piloto el 2026-11-18. Volver a verificarlo antes de la corrida formal; Windows no devolvió una lectura de batería en la consulta disponible.
 - **Aplicaciones abiertas en la sesión de documentación (snapshot 2026-11-18 10:48:35):** Chrome, VS Code, Word y EVE Online; también se observaron procesos de MongoDB y PostgreSQL. Este snapshot no es el estado de una corrida formal. Antes del experimento se cerrarán las aplicaciones no esenciales y se registrará cualquier aplicación que deba permanecer abierta.
 - **Temperatura:** no disponible. Plan B: reportarla como **no medida**, no estimarla; mantener iguales las condiciones de alimentación y calentamiento, y anotar cualquier señal de throttling o incidente.
 - **RAPL:** no disponible en Windows; **energía no medida**. El porcentaje de CPU no se usará como sustituto de energía.
-- **Experimento formal:** pendiente; volver a confirmar la alimentación y anotar qué aplicaciones quedan abiertas en la fecha de ejecución.
+- **Experimento formal:** pendiente; volver a confirmar la alimentación, las aplicaciones cerradas y registrar el perfil de energía antes de ejecutar.
 
 ## Intento de corrida del 2026-11-18
 
-El usuario confirmó conexión a corriente y cierre de EVE Online, MongoDB, PostgreSQL y Chrome antes de ejecutar el comando. Sin embargo, el JSON automático registró Windows 11 y CPython 3.13.0; una consulta local identificó el equipo como Acer Aspire A315-42, distinto del Lenovo documentado. `py -3.14` no está instalado. Por esta diferencia, el intento no se considera el experimento formal del equipo y la hipótesis no se evalúa con esos datos.
+El usuario confirmó conexión a corriente y cierre de EVE Online, MongoDB, PostgreSQL y Chrome antes de ejecutar el comando. El usuario confirmó después Acer Aspire A315-42 como el equipo correcto; la configuración actual del entorno queda actualizada a Windows 11 y CPython 3.13.0. `py -3.14` no está instalado.
 
-Los archivos se conservan solo en la copia local como `resultados/ensayo_no_formal_acer.csv` y `resultados/ensayo_no_formal_acer.entorno.json`; no se incluyen en el PR como resultados formales. El CSV tuvo 99 registros (90 de tiempo y 9 de memoria); el CV de B superó 10 % para n = 20, 40 y 80. La repetición prevista por el protocolo se pospone hasta poder medir en el equipo documentado.
+Los archivos del primer bloque se conservan solo en la copia local como `resultados/ensayo_no_formal_acer.csv` y `resultados/ensayo_no_formal_acer.entorno.json`; no se incluyen en el PR como resultados formales porque precedieron a la enmienda. El CSV tuvo 99 registros (90 de tiempo y 9 de memoria); el CV de B superó 10 % para n = 20, 40 y 80. Se hará un bloque formal nuevo y se repetirá si corresponde según el CV.
 
 ## Salida solicitada pendiente
 
