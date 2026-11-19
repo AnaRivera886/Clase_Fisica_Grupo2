@@ -47,4 +47,4 @@ El comando `py -3` se usa en este equipo porque `python` no está disponible en 
 
 | Fecha/hora | Incidente (p. ej. actualización del SO, batería o aplicación inesperada) | Corridas afectadas | Decisión |
 |---|---|---|---|
-| — | Sin experimento formal todavía | — | Registrar aquí cada incidente durante las corridas |
+| 2026-11-18 20:58–21:00 | Se ejecutó `py -3` en Acer Aspire A315-42, Windows 11 y CPython 3.13.0, distinto del Lenovo/Windows 10/CPython 3.14.7 documentado; `py -3.14` no está instalado. Jeff confirmó corriente y cierre de las aplicaciones indicadas; no reportó otros incidentes. | Intento inicial: 90 mediciones de tiempo y 9 de memoria; CV de B > 10 % en n = 20, 40 y 80. | Conservar el CSV y el JSON como ensayo no formal; no evaluar H1–H3 ni publicar como resultados formales. Repetir en el equipo documentado y aplicar el criterio de CV. |

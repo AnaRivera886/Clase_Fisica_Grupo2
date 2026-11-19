@@ -35,6 +35,12 @@ La comprobación de sensores de `herramientas.sensores` informó que temperatura
 - **RAPL:** no disponible en Windows; **energía no medida**. El porcentaje de CPU no se usará como sustituto de energía.
 - **Experimento formal:** pendiente; volver a confirmar la alimentación y anotar qué aplicaciones quedan abiertas en la fecha de ejecución.
 
+## Intento de corrida del 2026-11-18
+
+El usuario confirmó conexión a corriente y cierre de EVE Online, MongoDB, PostgreSQL y Chrome antes de ejecutar el comando. Sin embargo, el JSON automático registró Windows 11 y CPython 3.13.0; una consulta local identificó el equipo como Acer Aspire A315-42, distinto del Lenovo documentado. `py -3.14` no está instalado. Por esta diferencia, el intento no se considera el experimento formal del equipo y la hipótesis no se evalúa con esos datos.
+
+Los archivos se conservan solo en la copia local como `resultados/ensayo_no_formal_acer.csv` y `resultados/ensayo_no_formal_acer.entorno.json`; no se incluyen en el PR como resultados formales. El CSV tuvo 99 registros (90 de tiempo y 9 de memoria); el CV de B superó 10 % para n = 20, 40 y 80. La repetición prevista por el protocolo se pospone hasta poder medir en el equipo documentado.
+
 ## Salida solicitada pendiente
 
-Pegar aquí, sin editar, la salida de `diagnostico_entorno.py` cuando se copie desde el Drive y se ejecute en el equipo de medición.
+El archivo `diagnostico_entorno.py` del Drive no fue proporcionado y no aparece en el workspace. Pegar aquí, sin editar, su salida cuando esté disponible y se ejecute en el equipo de medición; el JSON automático anterior no sustituye esa salida.
