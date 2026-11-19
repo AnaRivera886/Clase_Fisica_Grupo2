@@ -70,7 +70,7 @@ En este Windows, `python` no está en PATH; usar `py -3 -m ...` como equivalente
 Los roles son flexibles: **todos** participan en la comprensión física y en el código.
 
 ## 8. Documentación
-- [Variables](docs/variables.md) · [Protocolo](docs/protocolo.md) · [Entorno](docs/entorno.md)
+- [Línea base](docs/linea_base.md) · [Variables](docs/variables.md) · [Protocolo](docs/protocolo.md) · [Entorno](docs/entorno.md)
 - [Decisiones técnicas](docs/decisiones.md) · [Uso de IA](docs/uso_ia.md) · [Informe](docs/informe.md)
 
 ## 9. Resultados y conclusiones (Clase 5)
