@@ -2,7 +2,7 @@
 
 ## Diagnóstico disponible
 
-El script `diagnostico_entorno.py` de la carpeta Scripts del Drive no está en esta copia de trabajo, así que todavía no puedo pegar su salida ni afirmar que esta sea su ejecución. Como comprobación local, ejecuté `py -3 -c "from herramientas.labmedicion import describir_entorno; import json; print(json.dumps(describir_entorno(), indent=2, ensure_ascii=False))"` desde `plantilla_repositorio/` el **2026-11-18 10:46:32**:
+El script `diagnostico_entorno.py` de la carpeta Scripts del Drive no está en esta copia de trabajo, así que todavía no puedo pegar su salida ni afirmar que esta sea su ejecución. Como comprobación local anterior, ejecuté `py -3 -c "from herramientas.labmedicion import describir_entorno; import json; print(json.dumps(describir_entorno(), indent=2, ensure_ascii=False))"` desde `plantilla_repositorio/` el **2026-11-18 10:46:32**:
 
 ```json
 {
