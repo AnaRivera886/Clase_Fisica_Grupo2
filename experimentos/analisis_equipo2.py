@@ -233,7 +233,10 @@ def main(argv=None) -> None:
     lineas += ["", "## Contraste de hipótesis", ""] + contrastar(resumen)
     lineas += ["", "## Gráficos e interpretación física", ""]
     for ruta_fig, titulo in figuras:
-        lineas.append(f"- `{ruta_fig}` — {titulo}. _Interpretación física: redactar con los datos reales._")
+        lineas.append(f"- `{ruta_fig}` — {titulo}.")
+    if figuras:
+        lineas += ["", "La interpretación física de cada gráfico se redacta a mano, con los datos reales, "
+                   "en `docs/informe.md` (sección 4. Resultados); este archivo solo se genera."]
     lineas += ["", "## Límites que se deben declarar", "",
                "- `time.sleep` simula la latencia de red: no representa una red real.",
                "- En C, `uso_cpu_pct` y `pico_mem_mib` no incluyen los procesos hijos (subestimados).",

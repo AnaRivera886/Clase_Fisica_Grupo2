@@ -31,9 +31,11 @@ Fuente: `resultados/resultados.csv`. Solo corridas de tiempo (`medicion_memoria 
 
 ## Gráficos e interpretación física
 
-- `figuras/tiempo_vs_n.png` — Tiempo de pared vs. n (log–log). _Interpretación física: redactar con los datos reales._
-- `figuras/comparacion_n_max.png` — Comparación de estrategias para n = 80. _Interpretación física: redactar con los datos reales._
-- `figuras/uso_cpu.png` — Uso de CPU del proceso por estrategia y n. _Interpretación física: redactar con los datos reales._
+- `figuras/tiempo_vs_n.png` — Tiempo de pared vs. n (log–log).
+- `figuras/comparacion_n_max.png` — Comparación de estrategias para n = 80.
+- `figuras/uso_cpu.png` — Uso de CPU del proceso por estrategia y n.
+
+La interpretación física de cada gráfico se redacta a mano, con los datos reales, en `docs/informe.md` (sección 4. Resultados); este archivo solo se genera.
 
 ## Límites que se deben declarar
 
