@@ -1,6 +1,6 @@
 # Hipótesis — Equipo 2
 
-Las predicciones se registran antes de medir. Se compararán las estrategias A y B con las mismas tareas para cada n; C se incluirá cuando su implementación esté integrada y supere las pruebas de corrección. La computadora disponible tiene 4 núcleos físicos y 8 lógicos. No suponemos que `pbkdf2_hmac` mantenga el GIL: puede liberar el GIL y permitir que los hilos ejecuten trabajo de CPU concurrentemente.
+Las predicciones se registran antes de medir. Se compararán las estrategias A, B y C con las mismas tareas para cada n. La computadora Acer Aspire A315-42 tiene 4 núcleos físicos y 8 lógicos. No suponemos que `pbkdf2_hmac` mantenga el GIL: puede liberar el GIL y permitir que los hilos ejecuten trabajo de CPU concurrentemente.
 
 ## H1 — Tiempo de pared
 
@@ -14,10 +14,22 @@ Las predicciones se registran antes de medir. Se compararán las estrategias A y
 
 **La refutaríamos** si el promedio de `uso_cpu_pct` de B menos el de A es inferior a 10 puntos porcentuales. `uso_cpu_pct` es tiempo de CPU del proceso dividido por tiempo de pared; puede superar 100 % al utilizar varios núcleos y no representa potencia ni energía.
 
+## H3 — Procesos frente a hilos y efecto del GIL
+
+> **Si** comparo B (hilos) con C (procesos) para n = 80 con la carga mixta fija del experimento, **entonces** el tiempo medio de pared de B no superará en más de 20 % al de C (`media_B / media_C ≤ 1,20`), **porque** `hashlib.pbkdf2_hmac` puede liberar el GIL y permitir que los hilos ejecuten cómputo concurrentemente, mientras que C incurre en el costo de crear procesos, **manteniendo** la misma carga y semilla 2, ocho trabajadores, equipo, versión de Python, alimentación, programas abiertos y protocolo de diez repeticiones.
+
+**La refutaríamos** si `media_B / media_C > 1,20`. Es una comparación indirecta: el tiempo de pared por sí solo no demuestra el comportamiento del GIL, y el costo de arranque de procesos también afecta a C. El CPU medido para C no sirve para esta comparación porque `time.process_time()` no incluye el CPU de los procesos hijos.
+
 ## Condiciones fijadas antes de medir
 
 - **Fecha de registro:** 2026-11-18.
-- **VI:** estrategia (A/B/C) y tamaño n (20, 40, 80 tareas).
+- **VI:** estrategia (A/B/C) y tamaño n (20, 40, 80 tareas); en H3 se compara específicamente B y C para n = 80.
 - **VD para contrastar estas hipótesis:** tiempo de pared (s) y uso de CPU del proceso (%).
-- **Controles:** equipo, Python, alimentación, programas abiertos, tareas generadas con semilla 2, calentamiento, orden aleatorio con semilla 42 y diez repeticiones por combinación.
+- **Controles:** carga mixta con proporción E/S predeterminada de 0,5, ocho trabajadores en B y C, equipo, Python, alimentación, programas abiertos, tareas generadas con semilla 2, calentamiento, orden aleatorio con semilla 42 y diez repeticiones por combinación.
 - **Energía:** no se medirá con RAPL ni vatímetro; no se afirmará ahorro energético.
+
+## Enmienda de controles antes del bloque formal
+
+- **Fecha:** 2026-11-18. Jeff confirma Acer Aspire A315-42 como equipo de medición. La lectura automática registró Windows 11 y CPython 3.13.0; `py -3.14` no está disponible.
+- **Alcance:** se actualiza el control de equipo y Python para el bloque formal siguiente. Se mantienen H1–H3, sus umbrales, las VI/VD, la carga, los ocho trabajadores y las diez repeticiones.
+- **Registro:** el intento anterior se conserva como piloto y no se usa para evaluar las hipótesis. La enmienda precede a la nueva corrida formal.

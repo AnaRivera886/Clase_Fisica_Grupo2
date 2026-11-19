@@ -4,18 +4,27 @@ Una estrategia más rápida pero incorrecta NO es una mejora.
 """
 import unittest
 
-from src import linea_base
+from src import estrategia_b, estrategia_c, linea_base
+
+ESTRATEGIAS = (
+    ("estrategia_b", estrategia_b),
+    ("estrategia_c", estrategia_c),
+)
+CASOS = tuple((n, proporcion_es) for n in (0, 1, 4, 9) for proporcion_es in (0.0, 0.5, 1.0))
 
 
 class TestCorreccion(unittest.TestCase):
-    def test_linea_base_ejecuta(self):
-        d = linea_base.preparar(6)
-        self.assertIsNotNone(linea_base.ejecutar(d))
+    def test_estrategias_coinciden_con_linea_base(self):
+        for nombre, estrategia in ESTRATEGIAS:
+            for n, proporcion_es in CASOS:
+                with self.subTest(estrategia=nombre, n=n, proporcion_es=proporcion_es):
+                    tareas = linea_base.preparar(n, proporcion_es=proporcion_es)
+                    esperado = linea_base.ejecutar(tareas)
+                    obtenido = estrategia.ejecutar(tareas)
 
-    # TODO (R2): una prueba por estrategia que compare su resultado con la línea base
-    # def test_estrategia_b_igual_a_base(self):
-    #     d = linea_base.preparar(6)
-    #     self.assertEqual(estrategia_b.ejecutar(d), linea_base.ejecutar(d))
+                    self.assertEqual(esperado, len(tareas))
+                    self.assertEqual(obtenido, esperado)
+                    self.assertEqual(obtenido, len(tareas))
 
 
 if __name__ == "__main__":

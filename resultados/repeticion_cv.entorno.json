@@ -1,0 +1,16 @@
+{
+  "fecha": "2026-11-18T21:49:07",
+  "sistema": "Windows 11",
+  "maquina": "AMD64",
+  "procesador": "AMD64 Family 23 Model 24 Stepping 1, AuthenticAMD",
+  "nucleos_logicos": 8,
+  "python": "3.13.0",
+  "implementacion": "CPython",
+  "psutil": null,
+  "sensores_disponibles": {
+    "frecuencia": false,
+    "temperatura": false,
+    "energia_rapl": false,
+    "psutil": false
+  }
+}
