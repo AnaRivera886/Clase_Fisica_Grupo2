@@ -1,6 +1,6 @@
 # Hipótesis — Equipo 2
 
-Las predicciones se registran antes de medir. Se compararán las estrategias A y B con las mismas tareas para cada n; C se incluirá cuando su implementación esté integrada y supere las pruebas de corrección. La computadora disponible tiene 4 núcleos físicos y 8 lógicos. No suponemos que `pbkdf2_hmac` mantenga el GIL: puede liberar el GIL y permitir que los hilos ejecuten trabajo de CPU concurrentemente.
+Las predicciones se registran antes de medir. Se compararán las estrategias A, B y C con las mismas tareas para cada n. La computadora Acer Aspire A315-42 tiene 4 núcleos físicos y 8 lógicos. No suponemos que `pbkdf2_hmac` mantenga el GIL: puede liberar el GIL y permitir que los hilos ejecuten trabajo de CPU concurrentemente.
 
 ## H1 — Tiempo de pared
 
