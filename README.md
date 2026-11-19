@@ -75,5 +75,9 @@ Los roles son flexibles: **todos** participan en la comprensión física y en el
 - [Decisiones técnicas](docs/decisiones.md) · [Uso de IA](docs/uso_ia.md) · [Informe](docs/informe.md)
 
 ## 9. Resultados y conclusiones (Clase 5)
-_Resumen de máximo 5 líneas con cifras, unidades e intervalo de confianza._
+Con n = 80 en el Acer Aspire A315-42 (repetición formal, 10 corridas, IC 95 %), la línea base tardó 2,134 s [2,120; 2,149], los hilos (B) 0,353 s [0,345; 0,361] y los procesos (C) 0,881 s [0,864; 0,899].
+B es 6,05 veces más rápida que A y sube el rendimiento de ≈ 38 a ≈ 227 tareas/s, porque solapa las esperas de E/S y `pbkdf2_hmac` libera el GIL (uso de CPU de B: 360 %, frente a 38 % de A).
+C es 2,42 veces más rápida que A con n = 80, pero más lenta con n = 20, por el costo fijo de crear procesos en Windows (≈ 0,5 s).
+H1, H2 y H3 no quedan refutadas en ninguno de los dos bloques formales. Recomendación para ServiCampo: atender la cola con un grupo de hilos.
+Límites: la red se simula con `time.sleep`, la energía no se midió y los resultados valen solo para este equipo y n = 20–80. Detalle en [docs/informe.md](docs/informe.md).
 # Clase_Fisica_Grupo2

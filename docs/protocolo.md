@@ -8,8 +8,8 @@ Comparar cómo cambian el tiempo de pared, el uso de CPU y el pico de memoria al
 
 ## 2. Preparación del entorno (antes de cada sesión)
 
-1. Usar el mismo computador: AMD Ryzen 5 PRO 2400G, 4 núcleos físicos y 8 lógicos, Windows 10 y CPython 3.14.7.
-2. Confirmar y anotar conexión a corriente y perfil de energía. Jeff confirmó conexión a corriente el 2026-11-18; volver a verificarla al empezar la corrida formal.
+1. Usar el equipo confirmado para la medición: Acer Aspire A315-42, Windows 11 y CPython 3.13.0 (`py -3`). Esta configuración reemplaza el control inicial Lenovo/Windows 10/CPython 3.14.7, según la enmienda previa al bloque formal.
+2. Confirmar y anotar conexión a corriente y perfil de energía al empezar cada corrida. Jeff confirmó conexión a corriente antes del intento piloto; volver a verificarla antes del bloque formal.
 3. Cerrar aplicaciones no esenciales y sincronizadores; no usar el equipo durante la medición. Anotar las aplicaciones que deban permanecer abiertas.
 4. Ejecutar el diagnóstico disponible y guardar su salida en `docs/entorno.md`. El script de Drive `diagnostico_entorno.py` no está en la copia de trabajo actual; no reemplazar su salida por una salida inventada.
 5. Confirmar que las estrategias A, B y C estén integradas, que las pruebas de corrección pasen y que la hipótesis ya tenga un commit anterior a la medición.
@@ -47,4 +47,6 @@ El comando `py -3` se usa en este equipo porque `python` no está disponible en 
 
 | Fecha/hora | Incidente (p. ej. actualización del SO, batería o aplicación inesperada) | Corridas afectadas | Decisión |
 |---|---|---|---|
-| — | Sin experimento formal todavía | — | Registrar aquí cada incidente durante las corridas |
+| 2026-11-18 20:58–21:00 | El primer bloque se ejecutó antes de enmendar los controles y de confirmar Acer como equipo objetivo. | Intento piloto: 90 mediciones de tiempo y 9 de memoria. | Conservarlo solo localmente; no usarlo para evaluar H1–H3. |
+| 2026-11-18 21:42–21:44 | Sin incidentes operativos reportados; AC `Online`, Acer y CPython 3.13.0 verificados. El CV superó 10 % en A/n=20 (11,42), A/n=40 (10,83), B/n=20 (48,26), C/n=20 (33,01), C/n=40 (23,71) y C/n=80 (38,18). | Primer bloque formal: 90 mediciones de tiempo y 9 de memoria. | Repetir el bloque completo en archivos separados, sin descartar datos. |
+| 2026-11-18 21:49–21:50 | La repetición completa terminó sin incidentes reportados. El CV siguió sobre 10 % solo en B/n=40 (10,88); las demás condiciones quedaron en o por debajo del umbral. | Repetición: 90 mediciones de tiempo y 9 de memoria. | Conservar ambos bloques y reportar el CV residual; no descartar corridas. |

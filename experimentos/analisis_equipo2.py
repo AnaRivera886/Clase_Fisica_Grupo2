@@ -9,7 +9,7 @@ Lee el CSV que escribe herramientas/labmedicion.py y, por estrategia y n:
   * calcula media, desviación estándar muestral, CV, IC 95 % (t de Student),
     atípicos por la regla de Tukey, aceleración S = t_A / t_X (mismo n) y
     rendimiento n / t [tareas/s];
-  * contrasta H1 y H2 con los criterios escritos en docs/hipotesis.md.
+  * contrasta H1, H2 y H3 con los criterios escritos en docs/hipotesis.md.
 
 Uso (desde la raíz del repositorio):
     python -m experimentos.analisis_equipo2 resultados/resultados.csv
@@ -177,17 +177,28 @@ def graficar(resumen: list[dict], carpeta: Path) -> list[tuple[str, str]]:
 def contrastar(resumen: list[dict]) -> list[str]:
     """Criterios copiados de docs/hipotesis.md (no se ajustan después de ver datos)."""
     por = {(f["estrategia"], f["n"]): f for f in resumen}
-    a, b = por.get((BASE, 80)), por.get(("B_hilos", 80))
-    if not (a and b):
-        return ["- H1/H2: faltan datos de A_linea_base o B_hilos con n = 80; no se pueden contrastar."]
-    s = a["t_media_s"] / b["t_media_s"]
-    du = b["uso_cpu_media_pct"] - a["uso_cpu_media_pct"]
-    return [
-        f"- **H1** (criterio: t̄_A / t̄_B ≥ 1,5 con n = 80): t̄_A / t̄_B = {s:.2f} → "
-        + ("**no refutada**." if s >= 1.5 else "**refutada**."),
-        f"- **H2** (criterio: Ū_B − Ū_A ≥ 10 puntos con n = 80): Ū_B − Ū_A = {du:.1f} puntos → "
-        + ("**no refutada**." if du >= 10 else "**refutada**."),
-    ]
+    a, b, c = por.get((BASE, 80)), por.get(("B_hilos", 80)), por.get(("C_procesos", 80))
+    salida = []
+    if a and b:
+        s = a["t_media_s"] / b["t_media_s"]
+        du = b["uso_cpu_media_pct"] - a["uso_cpu_media_pct"]
+        salida += [
+            f"- **H1** (criterio: t̄_A / t̄_B ≥ 1,5 con n = 80): t̄_A / t̄_B = {s:.2f} → "
+            + ("**no refutada**." if s >= 1.5 else "**refutada**."),
+            f"- **H2** (criterio: Ū_B − Ū_A ≥ 10 puntos con n = 80): Ū_B − Ū_A = {du:.1f} puntos → "
+            + ("**no refutada**." if du >= 10 else "**refutada**."),
+        ]
+    else:
+        salida.append("- H1/H2: faltan datos de A_linea_base o B_hilos con n = 80; no se pueden contrastar.")
+    if b and c:
+        r = b["t_media_s"] / c["t_media_s"]
+        salida.append(
+            f"- **H3** (criterio: t̄_B / t̄_C ≤ 1,20 con n = 80): t̄_B / t̄_C = {r:.2f} → "
+            + ("**no refutada**." if r <= 1.20 else "**refutada**.")
+            + " Comparación indirecta: el tiempo de pared no demuestra por sí solo el comportamiento del GIL.")
+    else:
+        salida.append("- H3: faltan datos de B_hilos o C_procesos con n = 80; no se puede contrastar.")
+    return salida
 
 
 def main(argv=None) -> None:
@@ -236,7 +247,7 @@ def main(argv=None) -> None:
         print(f"{f['estrategia']:<14}{f['n']:>4}{f['t_media_s']:>9.3f}{e:>8.3f}{f['t_cv_pct']:>7.1f}"
               f"{f['uso_cpu_media_pct']:>6.0f}{f['tareas_por_s']:>10.1f}{f['aceleracion_S']:>7.2f}")
     texto = "\n".join(contrastar(resumen))
-    for viejo, nuevo in (("t̄", "t"), ("Ū", "U"), ("**", ""), ("≥", ">="), ("−", "-"), ("→", "->")):
+    for viejo, nuevo in (("t̄", "t"), ("Ū", "U"), ("**", ""), ("≥", ">="), ("≤", "<="), ("−", "-"), ("→", "->")):
         texto = texto.replace(viejo, nuevo)
     print(texto)
     print(f"Escrito: {salida / 'resumen.csv'}, {salida / 'analisis.md'}"

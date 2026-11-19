@@ -17,3 +17,19 @@ Cada decisión importante se registra aquí y se enlaza desde el issue o PR corr
 - **Decisión:** Mantener `ejecutar(tareas) -> int`; cada estrategia comprueba que la lista de identificadores devuelta coincide, incluyendo duplicados, con los identificadores de entrada. Las pruebas comparan el resultado con la línea base y comprueban además que el conteo sea igual a `len(tareas)`.
 - **Justificación:** La comprobación de identificadores detecta tareas omitidas o duplicadas sin romper la interfaz usada por el ejecutor del experimento. Los casos con n = 0, n = 1 y proporciones 0, 0,5 y 1 cubren entradas vacías, pequeñas y las dos clases de tarea.
 - **Consecuencias / riesgos:** Se conserva una API sencilla, pero la verificación depende de que cada tarea devuelva su propio identificador; no prueba por sí sola que el cálculo interno de una tarea sea correcto.
+
+## D-003 — Variables independientes y controles del experimento
+- **Fecha:** 2026-11-18 · **Autor:** Jeff · **Issue/PR:** R1/R4, PR #1
+- **Contexto:** El experimento debe atribuir los cambios observados a factores definidos, evitando multiplicar las condiciones y confundir el efecto de la estrategia con otras decisiones de configuración.
+- **Opciones consideradas:** Tratar como factores experimentales la estrategia, el tamaño `n`, la proporción E/S y el número de trabajadores; o variar estrategia y `n` y mantener fija la carga mixta y la configuración de trabajadores.
+- **Decisión:** Las variables independientes son la estrategia (A/B/C) y el tamaño `n` (20, 40, 80). La proporción E/S queda fija en su valor predeterminado (0,5), y B/C mantienen ocho trabajadores.
+- **Justificación:** Estrategia y `n` responden directamente a la pregunta de investigación y sus efectos se observan en las mediciones de pared, CPU y memoria. Variar también la proporción E/S mezclaría el efecto del tipo de carga con el de la estrategia; variar trabajadores añadiría otro factor y muchas combinaciones, además de apartarse de la comparación prevista con ocho trabajadores. Mantener ambas constantes permite una comparación reproducible dentro del tiempo disponible.
+- **Consecuencias / riesgos:** Las conclusiones aplican a una carga mixta 50/50 y ocho trabajadores; no permiten afirmar cómo cambiarían los resultados con otras proporciones o tamaños de grupo.
+
+## D-004 — Rama principal del repositorio
+- **Fecha:** 2026-11-18 · **Autor:** Jeff · **Issue/PR:** R1, PR #1
+- **Contexto:** PR #1 tiene como base `main`, mientras que la referencia local `origin/HEAD` apuntaba inicialmente a `jefferson`; las ramas no estaban en el mismo commit.
+- **Opciones consideradas:** Tratar `jefferson` como rama principal por la referencia local; cambiar la base del PR; o usar la rama predeterminada que anuncia GitHub.
+- **Decisión:** Usar `main` como rama principal: GitHub informa `default_branch = main` y el HEAD remoto apunta a `refs/heads/main`. Se actualizó la referencia local `origin/HEAD`; PR #1 conserva `main` como base.
+- **Justificación:** La configuración del repositorio remoto es la fuente de verdad para la rama predeterminada. Al verificar, `main` estaba un commit por delante de `jefferson`.
+- **Consecuencias / riesgos:** `jefferson` no se considera rama principal; cualquier cambio exclusivo de esa rama debe integrarse mediante PR antes de asumirse presente en `main`.
