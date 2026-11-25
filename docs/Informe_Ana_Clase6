@@ -1,0 +1,73 @@
+# Parte de Ana (integrante C): análisis, hipótesis, física y mejora
+
+> Texto listo para pegar en `docs/informe.md`. Ajústalo a tu voz. Las figuras son `resultados_tiempo_vsn.png` y `resultados_barras.png`.
+
+## 1. Resultados
+
+Analicé 99 corridas (3 estrategias × 3 tamaños de entrada × 11 repeticiones). Excluí de las estadísticas de tiempo la repetición 0 de cada combinación, que es la corrida separada de memoria, como dice el protocolo. Quedaron 10 repeticiones por combinación. Las columnas de energía, potencia, frecuencia y temperatura quedaron vacías, así que **no se reporta energía**, como se decidió antes de medir. Los cálculos los hice con `analizar_resultados.py` y `verificar_hipotesis.py` del curso, y los comprobé con un cálculo independiente.
+
+| Estrategia   | n   | x̄ (s) | CV (%) | IC 95 % (s)   | Pico de memoria (MiB) |
+| ------------ | --- | ----- | ------ | ------------- | --------------------- |
+| A_linea_base | 20  | 0,502 | 11,4   | 0,461 – 0,544 | 0,002                 |
+| A_linea_base | 40  | 1,052 | 10,8   | 0,971 – 1,134 | 0,002                 |
+| A_linea_base | 80  | 2,172 | 1,4    | 2,151 – 2,194 | 0,002                 |
+| B_hilos      | 20  | 0,129 | 48,3   | 0,084 – 0,173 | 0,063                 |
+| B_hilos      | 40  | 0,196 | 3,6    | 0,191 – 0,201 | 0,098                 |
+| B_hilos      | 80  | 0,387 | 7,9    | 0,365 – 0,409 | 0,167                 |
+| C_procesos   | 20  | 0,790 | 33,0   | 0,604 – 0,977 | 0,083                 |
+| C_procesos   | 40  | 0,875 | 23,7   | 0,727 – 1,024 | 0,123                 |
+| C_procesos   | 80  | 1,109 | 38,2   | 0,806 – 1,412 | 0,197                 |
+
+El pico de memoria viene de una sola corrida por combinación, por lo que es indicativo y no tiene IC. Figuras: `resultados_tiempo_vsn.png` (tiempo vs. n, log-log, IC 95 %) y `resultados_barras.png` (comparación para n = 80, IC 95 %).
+
+## 2. Atípicos
+
+Seis combinaciones tuvieron CV > 10 %: A (n = 20 y 40, apenas por encima), B con n = 20 y C en los tres tamaños. No eliminé ninguna medición, porque no encontré una causa documentada en el protocolo.
+
+- **B, n = 20:** dos corridas lentas (0,191 s y 0,279 s) con uso de CPU cercano a 165-185 %, mientras las demás estuvieron cerca de 400 %. Con tiempos de ~0,1 s, el costo de arrancar los hilos y cualquier interrupción del sistema pesan mucho. Es una explicación probable, no comprobada.
+- **C:** es la estrategia más variable. Con n = 80, una corrida tardó 2,26 s y las demás rondaron 0,9 s. Es compatible con el costo de crear procesos, que el protocolo ya anticipaba, pero no lo comprobé.
+- **A, n = 20 y 40:** unas pocas corridas altas (por ejemplo 1,35 s con n = 40) que atribuyo a ruido del sistema. [Completar con lo que diga la bitácora de Jeff.]
+
+## 3. Hipótesis
+
+Criterio: el umbral que el equipo fijó en `hipotesis.md` antes de medir, apoyado en el IC 95 %, la prueba t de Welch y el tamaño del efecto (d de Cohen) para n = 80.
+
+**H1 (tiempo de pared): se confirma.** Predijimos A/B ≥ 1,5 con n = 80. Obtuve A/B = 5,62 (2,172 s frente a 0,387 s), con IC 95 % que no se solapan, t de Welch = 131,9 (crítico 2,131) y d de Cohen = 59. Superó el umbral 3,7 veces.
+
+**H2 (uso de CPU): se confirma.** Predijimos que B usaría al menos 10 puntos porcentuales más de CPU que A con n = 80. El uso medio fue 388,2 % en B y 38,6 % en A, una diferencia de 349,6 puntos porcentuales, muy por encima del umbral.
+
+**H3 (hilos frente a procesos): se confirma.** Predijimos media_B / media_C ≤ 1,20 con n = 80. Obtuve 0,349 (0,387 s frente a 1,109 s): B no solo no fue más lento que C, sino unas 2,9 veces más rápido. Para C, además, la comparación de tiempo tiene la cautela de su alta variabilidad (CV 38,2 %), pero la diferencia con B es grande y los IC no se solapan (B: 0,365 – 0,409 s; C: 0,806 – 1,412 s).
+
+**Complementos fuera de las hipótesis (todos los n):** B fue más rápida que A en los tres tamaños (3,90×, 5,36× y 5,62×), todas con IC que no se solapan. C fue _más lenta_ que A con n = 20 (0,64×), con n = 40 la mejora (1,20×) es significativa pero los IC se solapan (el script recomienda cautela y más repeticiones), y con n = 80 fue 1,96× más rápida. Es decir, el beneficio de C depende del tamaño de entrada. Con solo tres valores de n no estimo exponentes de crecimiento fiables, y no extrapolo fuera de 20 – 80.
+
+## 4. Explicación con física
+
+Lo **medido** fue el tiempo de pared, el tiempo de CPU del proceso y el pico de memoria. Los mecanismos que siguen son **inferencias** a partir de esos datos y del diseño de la carga.
+
+- **A (secuencial):** usa ~39 % de CPU con n = 80, o sea, el proceso espera más de la mitad del tiempo. Es coherente con la carga mixta del experimento, que simula esperas de E/S en la mitad de las tareas, y durante esas esperas el procesador no trabaja para esta tarea.
+- **B (hilos):** el uso de CPU sube a ~388 %, es decir, casi cuatro núcleos ocupados a la vez. Esto se explica por dos efectos: las esperas de E/S simuladas se solapan entre hilos, y `pbkdf2_hmac` puede liberar el GIL, lo que permite que el cálculo de hashes corra en paralelo en varios núcleos del procesador (4 físicos y 8 lógicos). Por eso el tiempo de pared baja unas 5,6 veces. No separé cuánto aporta cada efecto: hacerlo exigiría un experimento con la proporción de E/S como variable.
+- **Costo de coordinar:** B gasta más tiempo de CPU total que A (≈1,5 s frente a ≈0,84 s con n = 80). Ir más rápido no significa gastar menos recursos de cómputo.
+- **C (procesos):** crear procesos y comunicar datos entre ellos añade un costo fijo que se nota con n pequeño (con n = 20 C fue más lenta que A) y que varía mucho entre corridas. Su uso de CPU (~10 %) **no es comparable**: `time.process_time()` no incluye el CPU de los procesos hijos, así que no uso ese dato para concluir nada sobre C.
+- **Memoria:** B y C usan más memoria que A (con n = 80: 0,167 y 0,197 MiB frente a 0,002 MiB), porque cada hilo o proceso necesita su propio espacio. Es una sola corrida por celda, así que es indicativo.
+- **Energía:** no se midió (ni con RAPL ni con vatímetro), así que no afirmo ahorro de energía. Como E = P·t, B termina antes pero con varios núcleos activos, y no puedo decir si gasta más o menos energía total.
+
+## 5. Propuesta de mejora
+
+Recomiendo a la empresa adoptar la estrategia **B_hilos** para cargas como la del experimento. En mis mediciones redujo el tiempo de ejecución en un 74 % (n = 20), 81 % (n = 40) y 82 % (n = 80) frente a la secuencial; con n = 80 pasó de 2,17 s a 0,39 s. Además fue más rápida y más predecible que C_procesos con n = 80.
+
+No recomiendo C_procesos: solo supera a la secuencial con n = 80, es peor con n = 20 y su variabilidad es muy alta (CV de 24 a 38 %).
+
+**Condiciones de validez:**
+
+- Se midió en un solo computador (Acer Aspire A315-42, 4 núcleos físicos y 8 lógicos), con n entre 20 y 80 y una carga mixta con 50 % de E/S simulada. Con otra proporción de E/S, otro hardware o tamaños mucho mayores, la mejora puede cambiar.
+- La mejora depende de que haya núcleos libres.
+
+**Riesgos:**
+
+- B ocupa casi 4 núcleos durante la ejecución, lo que puede afectar a otras aplicaciones del mismo equipo.
+- Con n pequeño (≈ 20) el tiempo de B es muy variable.
+- No se midió energía ni temperatura. Antes de extenderlo a gran escala habría que medirlas.
+
+## 6. Principal limitación de la medición
+
+No se midió energía ni potencia, la prueba se hizo en un solo computador y con una carga simulada (E/S simulada), y no se midió el CPU de los procesos hijos de C. Por eso las conclusiones valen para tiempo de pared y uso de CPU del proceso principal, y no para consumo energético ni para otros equipos.

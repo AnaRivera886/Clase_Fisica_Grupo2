@@ -1,0 +1,78 @@
+﻿n = 20   (A = A_linea_base ┬À B = B_hilos)
+  A_linea_base             media = 0.502479 s   CV = 11.4 %   IC95 = [0.461445, 0.543512]  (10 rep.)
+  B_hilos                  media = 0.128790 s   CV = 48.3 %   IC95 = [0.084334, 0.173247]  (10 rep.)
+
+Diferencia A - B      = 0.373689 s  (+74.4 % respecto a A)
+Aceleraci├│n A/B       = 3.90x
+t de Welch            = 13.97  (gl Ôëê 17.9, t cr├¡tico 95 % = 2.131)
+d de Cohen            = 6.25
+Intervalos solapados  = no
+
+Lectura:
+  La diferencia es estad├¡sticamente consistente: es poco probable que se deba al ruido.
+  Recuerde: significativo no es lo mismo que importante. ┬┐Cu├íntos segundos/julios ahorra en producci├│n?
+n = 20   (A = A_linea_base ┬À B = C_procesos)
+  A_linea_base             media = 0.502479 s   CV = 11.4 %   IC95 = [0.461445, 0.543512]  (10 rep.)
+  C_procesos               media = 0.790453 s   CV = 33.0 %   IC95 = [0.603809, 0.977097]  (10 rep.)
+
+Diferencia A - B      = -0.287974 s  (-57.3 % respecto a A)
+Aceleraci├│n A/B       = 0.64x
+t de Welch            = -3.41  (gl Ôëê 9.9, t cr├¡tico 95 % = 2.262)
+d de Cohen            = -1.52
+Intervalos solapados  = no
+
+Lectura:
+  La diferencia es estad├¡sticamente consistente: es poco probable que se deba al ruido.
+  Recuerde: significativo no es lo mismo que importante. ┬┐Cu├íntos segundos/julios ahorra en producci├│n?
+n = 40   (A = A_linea_base ┬À B = B_hilos)
+  A_linea_base             media = 1.052376 s   CV = 10.8 %   IC95 = [0.970832, 1.133919]  (10 rep.)
+  B_hilos                  media = 0.196196 s   CV = 3.6 %   IC95 = [0.191167, 0.201225]  (10 rep.)
+
+Diferencia A - B      = 0.856180 s  (+81.4 % respecto a A)
+Aceleraci├│n A/B       = 5.36x
+t de Welch            = 23.71  (gl Ôëê 9.1, t cr├¡tico 95 % = 2.262)
+d de Cohen            = 10.60
+Intervalos solapados  = no
+
+Lectura:
+  La diferencia es estad├¡sticamente consistente: es poco probable que se deba al ruido.
+  Recuerde: significativo no es lo mismo que importante. ┬┐Cu├íntos segundos/julios ahorra en producci├│n?
+n = 40   (A = A_linea_base ┬À B = C_procesos)
+  A_linea_base             media = 1.052376 s   CV = 10.8 %   IC95 = [0.970832, 1.133919]  (10 rep.)
+  C_procesos               media = 0.875463 s   CV = 23.7 %   IC95 = [0.726995, 1.023932]  (10 rep.)
+
+Diferencia A - B      = 0.176912 s  (+16.8 % respecto a A)
+Aceleraci├│n A/B       = 1.20x
+t de Welch            = 2.36  (gl Ôëê 14.0, t cr├¡tico 95 % = 2.179)
+d de Cohen            = 1.06
+Intervalos solapados  = s├¡
+
+Lectura:
+  Diferencia significativa, pero los IC se solapan: reporte con cautela y aumente repeticiones.
+  Recuerde: significativo no es lo mismo que importante. ┬┐Cu├íntos segundos/julios ahorra en producci├│n?
+n = 80   (A = A_linea_base ┬À B = B_hilos)
+  A_linea_base             media = 2.172286 s   CV = 1.4 %   IC95 = [2.150825, 2.193746]  (10 rep.)
+  B_hilos                  media = 0.386690 s   CV = 7.9 %   IC95 = [0.364837, 0.408542]  (10 rep.)
+
+Diferencia A - B      = 1.785596 s  (+82.2 % respecto a A)
+Aceleraci├│n A/B       = 5.62x
+t de Welch            = 131.87  (gl Ôëê 18.0, t cr├¡tico 95 % = 2.131)
+d de Cohen            = 58.98
+Intervalos solapados  = no
+
+Lectura:
+  La diferencia es estad├¡sticamente consistente: es poco probable que se deba al ruido.
+  Recuerde: significativo no es lo mismo que importante. ┬┐Cu├íntos segundos/julios ahorra en producci├│n?
+n = 80   (A = A_linea_base ┬À B = C_procesos)
+  A_linea_base             media = 2.172286 s   CV = 1.4 %   IC95 = [2.150825, 2.193746]  (10 rep.)
+  C_procesos               media = 1.109429 s   CV = 38.2 %   IC95 = [0.806469, 1.412388]  (10 rep.)
+
+Diferencia A - B      = 1.062857 s  (+48.9 % respecto a A)
+Aceleraci├│n A/B       = 1.96x
+t de Welch            = 7.92  (gl Ôëê 9.1, t cr├¡tico 95 % = 2.262)
+d de Cohen            = 3.54
+Intervalos solapados  = no
+
+Lectura:
+  La diferencia es estad├¡sticamente consistente: es poco probable que se deba al ruido.
+  Recuerde: significativo no es lo mismo que importante. ┬┐Cu├íntos segundos/julios ahorra en producci├│n?
