@@ -20,7 +20,7 @@ H1, H2... (copiadas de docs/hipotesis.md, sin modificarlas después de ver los d
 ## 4. Resultados
 _Redactó: Ana (R4, análisis). Datos: Acer Aspire A315-42, Windows 11, CPython 3.13.0, 2026-11-18. Análisis con `py -m experimentos.analisis_equipo2`._
 
-**Bloque que se reporta.** El protocolo exige CV ≤ 10 %. El primer bloque formal (`resultados/resultados.csv`) no lo cumplió en 6 de 9 combinaciones y se repitió completo (`resultados/repeticion_cv.csv`), donde solo B con n = 40 queda en 10,9 %. Se propone reportar la **repetición** como resultado principal y el primer bloque como anexo, sin descartar datos (pendiente de registrar como D-005). Las tablas completas están en `resultados/analisis_repeticion_cv/analisis.md` y `resultados/analisis_resultados/analisis.md`.
+**Bloque que se reporta.** El protocolo exige CV ≤ 10 %. El primer bloque formal (`resultados/resultados.csv`) no lo cumplió en 6 de 9 combinaciones y se repitió completo (`resultados/repeticion_cv.csv`), donde solo B con n = 40 queda en 10,9 %. Según D-005, se reporta la **repetición** como resultado principal y el primer bloque como complemento, sin descartar datos. Las tablas completas están en `resultados/analisis_repeticion_cv/analisis.md` y `resultados/analisis_resultados/analisis.md`.
 
 **Tabla 1. Tiempo de pared por estrategia y n (repetición, 10 corridas por combinación).**
 
@@ -67,7 +67,7 @@ Las tres hipótesis se sostienen en los dos bloques, así que la conclusión no 
 **Limitaciones y amenazas a la validez.**
 - `time.sleep` es un modelo de la red: siempre dura lo programado, sin errores ni variabilidad real.
 - C tiene la CPU y la memoria subestimadas porque `labmedicion` no ve a los procesos hijos.
-- El primer bloque tuvo CV de hasta 48 % (B, n = 20) y 38 % (C, n = 80), atribuible a la variación del arranque de procesos y a la actividad del sistema; la repetición quedó estable. Se reportan ambos.
+- El primer bloque tuvo CV de hasta 48 % (B, n = 20) y 38 % (C, n = 80). La revisión retrospectiva no encontró una causa documentada ni un registro por corrida de aplicaciones abiertas o calentamiento; por tanto, no se atribuye la variabilidad a una causa específica. C/n=80/repetición 1 duró 2,263765 s y es extremo por Tukey. Se conserva, como todas las mediciones, y se reportan ambos bloques.
 - El equipo de medición cambió del Lenovo al Acer antes del bloque formal (enmienda documentada en `docs/hipotesis.md` y `docs/protocolo.md`); todos los datos formales vienen del Acer y no se comparan equipos distintos.
 - Los resultados valen solo para este equipo, CPython 3.13.0, carga 50 % E/S y 50 % CPU, 8 trabajadores y n entre 20 y 80.
 - Energía no medida: aunque B es más rápida, usa más núcleos a la vez (más potencia instantánea), y como E = P̄·t no se puede afirmar que gaste menos energía.

@@ -36,6 +36,16 @@ La comprobación de sensores de `herramientas.sensores` informó que temperatura
 - **Aplicaciones del protocolo:** antes de ambos bloques se verificó que EVE Online, MongoDB, PostgreSQL y Chrome no aparecieran como procesos activos.
 - **Experimento formal:** completado en dos bloques, con 90 mediciones de tiempo y 9 de memoria cada uno. La repetición y los CV se registran en `docs/protocolo.md`.
 
+### Alcance y límites confirmados
+
+Los dos bloques formales se midieron en **un solo computador**: Acer Aspire A315-42, Ryzen 5 3500U, Windows 11, CPython 3.13.0, 4 núcleos físicos y 8 lógicos. No permiten generalizar a otros equipos. No se midió energía (sin RAPL ni vatímetro), y el porcentaje de CPU no es un sustituto de energía.
+
+`cpu_proceso_s` se obtiene con `time.process_time()`, que suma CPU de usuario y sistema del proceso que ejecuta el arnés; no incorpora el tiempo de CPU de los procesos hijos de `C_procesos`. Por eso `uso_cpu_pct` de C es una subestimación. De forma análoga, `tracemalloc` no mide la memoria de sus procesos hijos.
+
+El diagnóstico local Windows 10/CPython 3.14.7 de arriba y cualquier análisis posterior ejecutado en ese entorno no modifican las condiciones de adquisición de los CSV formales, que constan como Windows 11/CPython 3.13.0 en sus archivos `.entorno.json`.
+
+El 2026-11-26 se volvió a ejecutar el análisis estadístico en Windows 10/CPython 3.14.7; los CSV no se modificaron. `matplotlib` no está instalado en ese entorno, así que el script actualizó los resúmenes y el informe, pero no regeneró las figuras existentes.
+
 ## Intento de corrida del 2026-11-18
 
 El usuario confirmó conexión a corriente y cierre de EVE Online, MongoDB, PostgreSQL y Chrome antes de ejecutar el comando. El usuario confirmó después Acer Aspire A315-42 como el equipo correcto; la configuración actual del entorno queda actualizada a Windows 11 y CPython 3.13.0. `py -3.14` no está instalado.

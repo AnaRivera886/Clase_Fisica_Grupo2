@@ -7,7 +7,7 @@ Cada decisión importante se registra aquí y se enlaza desde el issue o PR corr
 - **Contexto:** el enunciado pide al menos tres estrategias comparables (la línea base cuenta) y propone tres direcciones: hilos, asyncio y procesos. La Guía de errores frecuentes advierte que no deben ser la misma idea.
 - **Opciones consideradas:** 1) B hilos + C asyncio. 2) B hilos + C procesos. 3) Implementar las tres.
 - **Decisión:** B = hilos (`ThreadPoolExecutor`) y C = procesos (`ProcessPoolExecutor`), ambas con `N_TRABAJADORES = 8`. El grupo de hilos o procesos se crea dentro de `ejecutar`, así que su costo se mide.
-- **Justificación (incluya evidencia o principio físico):** hilos y asyncio están en la misma rama del mapa (aprovechar esperas ociosas, concurrencia); procesos está en otra (repartir trabajo entre núcleos, paralelismo). Así comparamos concurrencia contra paralelismo. 8 = núcleos lógicos del equipo de medición (Ryzen 5 PRO 2400G, ver `docs/entorno.md`): más procesos que núcleos solo añade cambios de contexto. El costo de crear los procesos se mide porque el usuario también lo espera.
+- **Justificación (incluya evidencia o principio físico):** hilos y asyncio están en la misma rama del mapa (aprovechar esperas ociosas, concurrencia); procesos está en otra (repartir trabajo entre núcleos, paralelismo). Así comparamos concurrencia contra paralelismo. 8 = núcleos lógicos del equipo de medición (Ryzen 5 3500U, ver `docs/entorno.md`): más procesos que núcleos solo añade cambios de contexto. El costo de crear los procesos se mide porque el usuario también lo espera.
 - **Consecuencias / riesgos:** C paga un costo fijo de arranque (*spawn* en Windows) que puede hacerla más lenta que A con n pequeño. `labmedicion` no cuenta el CPU ni la memoria de los procesos hijos: en C, `uso_cpu_pct` y `pico_mem_mib` salen subestimados y se reportan como tales. asyncio queda como posible estrategia D si sobra tiempo.
 
 ## D-002 — Verificación de que no se omitan tareas
@@ -33,3 +33,11 @@ Cada decisión importante se registra aquí y se enlaza desde el issue o PR corr
 - **Decisión:** Usar `main` como rama principal: GitHub informa `default_branch = main` y el HEAD remoto apunta a `refs/heads/main`. Se actualizó la referencia local `origin/HEAD`; PR #1 conserva `main` como base.
 - **Justificación:** La configuración del repositorio remoto es la fuente de verdad para la rama predeterminada. Al verificar, `main` estaba un commit por delante de `jefferson`.
 - **Consecuencias / riesgos:** `jefferson` no se considera rama principal; cualquier cambio exclusivo de esa rama debe integrarse mediante PR antes de asumirse presente en `main`.
+
+## D-005 — Bloque formal principal y tratamiento de valores atípicos
+- **Fecha:** 2026-11-26 · **Autor:** Jeff · **Referencia:** cierre de Clase 5
+- **Contexto:** El primer bloque formal excedió CV = 10 % en seis combinaciones. La repetición completa dejó solo B con n = 40 por encima del umbral (10,9 %).
+- **Opciones consideradas:** Reportar el primer bloque, sustituirlo por la repetición, combinar ambos o excluir mediciones marcadas como atípicas.
+- **Decisión:** Reportar `resultados/repeticion_cv.csv` como bloque principal y conservar `resultados/resultados.csv` como bloque inicial complementario. No excluir ni borrar mediciones; mostrar el CV residual de B/n=40.
+- **Justificación:** El protocolo indica repetir el bloque completo cuando el CV supera 10 % y conservar ambos conjuntos. La repetición redujo la inestabilidad en ocho de nueve combinaciones y las conclusiones H1–H3 se sostienen en ambos bloques.
+- **Consecuencias / riesgos:** La revisión retrospectiva no pudo identificar una causa concreta para los CV altos del primer bloque. En particular, C/n=80/repetición 1 (2,263765 s) es un valor extremo por Tukey, pero no hay registro de una incidencia que justifique excluirlo. Las conclusiones quedan limitadas a un equipo y no constituyen una medición de energía.
